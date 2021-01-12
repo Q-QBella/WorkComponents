@@ -3,6 +3,7 @@
   <div class="upLoadFile">
     <div class="upLoad">
       <div class="upLoad-icon"><i class="el-icon-plus" /></div>
+        // el-icon-plus可以替换成图片
       <input type="file" class="input" :accept="accept" @change="upLoadDate($event)">
       <div v-if="imageNoShow" class="upLoad-img"><img :src="imageUrl" alt="上传的图片"></div>
     </div>
@@ -51,7 +52,7 @@ export default {
     upLoadDate(e) {
       // 对文件选择进行处理
       const file = e.target.files[0]
-      console.log('upLoadDate', file)
+      // console.log('upLoadDate', file)
       if (!this.checkFile(file)) {
         this.$emit('fileLimit', false)
         return
@@ -70,8 +71,7 @@ export default {
         Object.assign(header, this.headers)
       }
       axios({
-        // url: this.upLoadUrl,
-        url: `${process.env.VUE_APP_BASE_API}/api/UploadFile`,
+        url: this.upLoadUrl,
         method: 'POST',
         data: param,
         headers: header,
@@ -94,7 +94,6 @@ export default {
         return true
       } else {
         const arrStr = this.accept.split(',')
-        console.log('arrStr', arrStr)
         const type = file.name.slice(file.name.indexOf('.'), file.name.length)
         const value = arrStr.some((item) => {
           return item === type
