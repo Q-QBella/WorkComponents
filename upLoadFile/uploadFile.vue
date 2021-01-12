@@ -4,6 +4,7 @@
     <div class="upLoad">
       <div class="upLoad-icon"><i class="el-icon-plus" /></div>
       <input type="file" class="input" :accept="accept" @change="upLoadDate($event)">
+      <div v-if="imageNoShow" class="upLoad-img"><img :src="imageUrl" alt="上传的图片"></div>
     </div>
   </div>
 </template>
@@ -28,10 +29,23 @@ export default {
     upLoadUrl: {
       type: String,
       default: ''
+    },
+    imageUrl: {
+      type: String,
+      default: ''
     }
   },
   data() {
-    return {}
+    return {
+      imageNoShow: false
+    }
+  },
+  watch: {
+    imageUrl(newValue, oldValue) {
+      if (newValue !== '') {
+        this.imageNoShow = true
+      }
+    }
   },
   methods: {
     upLoadDate(e) {
@@ -56,7 +70,8 @@ export default {
         Object.assign(header, this.headers)
       }
       axios({
-        url: this.upLoadUrl,
+        // url: this.upLoadUrl,
+        url: `${process.env.VUE_APP_BASE_API}/api/UploadFile`,
         method: 'POST',
         data: param,
         headers: header,
@@ -93,6 +108,7 @@ export default {
 <style lang='scss' scoped>
 .upLoadFile {
   input[type="file"] {
+    position: relative;
     border: 1px solid;
     width: 100%;
     height: 100%;
@@ -117,6 +133,17 @@ export default {
     font-size: 40px;
     color:#cccccc;
     z-index: 0;
+  }
+  .upLoad-img {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 100%;
+    transform: translate(-50%,-50%);
+    z-index: 2;
+    img {
+      width: 100%;
+    }
   }
 }
 }
